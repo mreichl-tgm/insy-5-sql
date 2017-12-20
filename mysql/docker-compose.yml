@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+    insy-mysql:
+        image: mysql
+        restart: always
+        ports:
+          - '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: insy-mysql
+        volumes:
+          - './var/lib/mysql:/var/lib/mysql'
+        container_name: insy-mysql

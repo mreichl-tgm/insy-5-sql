@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+sudo docker exec -it insy-postgres psql -U postgres
