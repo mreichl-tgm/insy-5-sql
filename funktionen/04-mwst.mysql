@@ -1,0 +1,23 @@
+-- MWST
+DELIMITER //
+DROP PROCEDURE IF EXISTS preisBrutto;
+CREATE PROCEDURE preisBrutto(IN speise_snr INTEGER, OUT preis_brutto DECIMAL(4, 2))
+BEGIN
+	SELECT speise.preis * 1.2 FROM speise WHERE speise.snr = speise_snr;
+END;//
+DELIMITER ;
+
+CALL preisBrutto(1, @preis_brutto);
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS preisMwst;
+CREATE PROCEDURE preisMwst(IN speise_snr INTEGER, OUT preis_brutto DECIMAL(4, 2))
+BEGIN
+	SELECT speise.preis * 0.2 FROM speise WHERE speise.snr = speise_snr;
+END;//
+DELIMITER ;
+
+CALL preisMwst(1, @mwst);
+
+-- TODO: Auf alle Speisen anwenden
+-- SELECT bezeichnung, CALL preisBrutto(speise.*, @preis_brutto) as "Brutto", CALL preisMwst(speise.*, @mwst) as "Mwst." FROM speise;

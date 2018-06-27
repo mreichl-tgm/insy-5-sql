@@ -1,0 +1,70 @@
+\documentclass{school}
+\title{Fragen zu „Backup \& Restore“}
+\subject{Informationssysteme}
+\author{Markus Reichl}
+
+\begin{document}
+\vskip 1em
+Die folgenden Aufgabenstellungen sollen jeweils mit MySQL und PostgreSQL umgesetzt werden. Verwende dazu die Standard-Backup-Tools dieser DBMS (MySQL: mysqldump, mysqlhotcopy, ibbackup bzw. PostgreSQL: pg\_dump).
+Die Durchführung der Schritte soll mittels Screenshots dokumentiert werden und jeweils durch eine kurze Zusammenfassung der Ergebnisse bzw.Erkenntnisse erläutert werden. Die verwendeten Quellen sollen dokumentiert werden. 
+Die Abgabe soll als .pdf-Dokument erfolgen.
+
+\newpage
+\section{Wie können eine/mehrere/alle Datenbanken des Servers in einer gemeinsamen Datei gespeichert werden?}
+\verb|$ mysqldump --opt -u [uname] -p[pass] [db] > [file].sql|\\
+\verb|$ pg_dump [connection-option...] [option...] [dbname] > [file].sql|
+\subsection{Eine Datenbank}
+\verb|$ mysqldump -u root -p [db] > [file].sql|\\
+\verb|$ pg_dump -U root -W [dbname] > [file].sql|
+\subsection{Mehrere Datenbanken}
+\verb|$ mysqldump -u root -p --databases [db1] [db2] > [file].sql|
+\subsection{All Datenbanken}
+\verb|$ mysqldump -u root -p --all-databases > [file].sql|\\
+\verb|$ pg_dumpall -U root -W [dbname] > [file].sql|
+
+\section{Wie kann definiert werden, dass zusätzlich zu den Daten auch die Tabellenstrukturen/Trigger/Stored Routines gespeichert werden?}
+\subsection{MySQL}
+\paragraph{Tabellenstrukturen: }\verb|--create-options|
+\paragraph{Trigger: } Deaktiviert durch \verb|--skip-triggers|
+\paragraph{Stored Routines: }\verb|--routines -R|
+
+\subsection{Postgres}
+Werden standardmäßig gespeichert. Trigger können über \verb|--disable-triggers| deaktiviert werden.
+
+\section{Wie können die IF EXISTS bzw. DROP-Klauseln in den Sicherungen eingefügt/unterdrückt werden?}
+\subsection{MySQL}
+\verb|--add-drop-database|
+\verb|--add-drop-table|
+\verb|--add-drop-trigger|
+
+\subsection{Postgres}
+\verb|-c --clean|
+
+\newpage
+\section{Was sind die Vor- bzw. Nachteile der beiden Verfahren „Physisches Backup“/„Logisches Backup“?}
+\subsection{Physisch}
++ Rascher einsetzbar (kein Parser)\\
+- Nicht lesbar
+\subsection{Logisch}
+- Wesentlich mehr Speicherplatz
+
+\section{Wie kann ein „Hot Backup“durchgeführt werden?}
+\subsection{MySQL}
+https://www.digitalocean.com/community/tutorials/how-to-create-hot-backups-of-mysql-databases-with-percona-xtrabackup-on-ubuntu-14-04
+
+\subsection{Postgres}
+http://www.anchor.com.au/hosting/dedicated/Postgres-backup-improvement-with-hot-backup
+
+\section{Wie kann ein „Remote Backup“(z.B. auf einem externen, gemieteten Server) angestoßen werden?}
+RClone
+
+\section{Wie könnten die Backupvarianten aus Punkt 1.) automatisiert werden (Uhrzeit als Trigger)?}
+In regelmäßigen Intervallen / Copy on Write
+
+\section{Geben Sie entsprechend für ihr Betriebssystem (Windows, Linux, Mac, ...) Möglichkeiten an.}
+Systemd, Cronjobs (Cronie)
+
+\section{Wie könnte der Zeitpunkt der Sicherung in den Dateinamen des Dumps automatisiert eingefügt werden (z.B. DBNAME\_20100413\_0952.sql)?}
+Systemvariablen setzen und als Dateiname verwenden: Basic Batch Scripting
+
+\end{document}

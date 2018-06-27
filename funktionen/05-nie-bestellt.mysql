@@ -1,0 +1,19 @@
+-- Übung: Nie bestellte Speisen
+-- Übung:
+-- Erstelle eine weitere Funktion zur Berechnung der MWSt. Zeige von allen Speisen den
+-- Brutto-Preis als Brutto und die darin enthaltene MWSt. als Spalte MWSt an.
+-- Zusatz: Die Anzeige bei Brutto/MWSt soll auf zwei Nachkommastellen beschränkt werden.
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS nieBestellteSpeisen;
+CREATE PROCEDURE nieBestellteSpeisen() 
+BEGIN
+	SELECT speise.bezeichnung AS "Bezeichnung", speise.preis AS "Nettopreis"
+	FROM speise
+	WHERE speise.snr NOT IN (SELECT snr FROM bestellung);
+END//
+DELIMITER ;
+
+CALL nieBestellteSpeisen();
+
+SELECT * FROM nieBestellteSpeisen();

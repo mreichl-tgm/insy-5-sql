@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+docker container exec -it insy-mysql mysql --password=insy-mysql 

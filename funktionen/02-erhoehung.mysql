@@ -1,0 +1,25 @@
+-- AUTHOR: Markus Reichl
+-- VERSION: 24.10.2017
+
+-- Übung: Funktion mit 2 Parametern
+-- Erstelle eine Funktion mit zwei Parametern: Alle Speisen die billiger als der Durchschnittspreis aller Speisen sind, sollen um einen fixen Betrag erhöht werden, alle Speisen die teurer sind, sollen um einen Prozentwert erhöht werden. 
+DELIMITER //
+DROP PROCEDURE IF EXISTS preisavg;
+CREATE PROCEDURE preisavg()
+BEGIN
+	SELECT avg(preis) FROM speise;
+END;//
+DELIMITER ;
+
+CALL preisavg;
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS preiserhoehung;
+CREATE PROCEDURE preiserhoehung(IN add_value INTEGER, IN multiply_value INTEGER)
+BEGIN
+	UPDATE speise SET preis = preis + value WHERE preis < preisavg();
+	UPDATE speise SET preis = preis * (100 + multiply_value) / 100 WHERE preis >= preisavg();
+END;//
+DELIMITER ;
+
+CALL preiserhoehung(1, 2); 
